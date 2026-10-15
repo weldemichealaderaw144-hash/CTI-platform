@@ -476,6 +476,8 @@ def hash_uploaded_file():
 
 @app.post("/api/file/static-analysis")
 def static_file_analysis():
+    """Perform static file analysis without executing the sample."""
+
     uploaded = request.files.get("file")
 
     if uploaded is None or not uploaded.filename:
@@ -486,15 +488,15 @@ def static_file_analysis():
     if not filename:
         return jsonify({"error": "Invalid filename"}), 400
 
-    # Keep analysis tools isolated from the permanent upload directory.
+    sha256 = hashlib.sha256()
+    md5 = hashlib.md5()
+    size = 0
+
     with tempfile.TemporaryDirectory(prefix="cti-static-") as temp_dir:
         sample_path = os.path.join(temp_dir, "sample.bin")
 
-        sha256 = hashlib.sha256()
-        md5 = hashlib.md5()
-        size = 0
-
         try:
+            # Save the sample temporarily and calculate its hashes.
             with open(sample_path, "wb") as sample:
                 while True:
                     chunk = uploaded.stream.read(1024 * 1024)
@@ -521,6 +523,10 @@ def static_file_analysis():
                 "file_type": "Unavailable",
                 "pe_metadata": None,
                 "strings": [],
+                "strings_status": "Not run",
+                "office_analysis": {
+                    "status": "Not applicable"
+                },
                 "indicators": {
                     "urls": [],
                     "ipv4_addresses": []
@@ -535,12 +541,16 @@ def static_file_analysis():
                 },
                 "assessment": "Not assessed",
                 "message": (
-                    "Static analysis only. No sample was executed. "
-                    "Tool findings require analyst review."
+                    "Static analysis only. The sample was not "
+                    "executed. Findings require analyst review."
                 )
             }
 
-            # Identify the file by its contents.
+            extracted_text = ""
+
+            # -------------------------------------------------
+            # 1. Identify file type
+            # -------------------------------------------------
             file_command = shutil.which("file")
 
             if file_command:
@@ -563,7 +573,9 @@ def static_file_analysis():
                 except subprocess.TimeoutExpired:
                     result["file_type"] = "Identification timed out"
 
-            # Extract PE metadata when the file is a Windows PE.
+            # -------------------------------------------------
+            # 2. Extract Windows PE metadata
+            # -------------------------------------------------
             try:
                 pe = pefile.PE(sample_path, fast_load=True)
 
@@ -572,30 +584,39 @@ def static_file_analysis():
                     "number_of_sections": (
                         pe.FILE_HEADER.NumberOfSections
                     ),
-                    "timestamp": (
-                        pe.FILE_HEADER.TimeDateStamp
+                    "timestamp": pe.FILE_HEADER.TimeDateStamp,
+                    "entry_point": hex(
+                        pe.OPTIONAL_HEADER.AddressOfEntryPoint
                     ),
-                    "entry_point": (
-                        hex(pe.OPTIONAL_HEADER.AddressOfEntryPoint)
-                    ),
-                    "image_base": (
-                        hex(pe.OPTIONAL_HEADER.ImageBase)
+                    "image_base": hex(
+                        pe.OPTIONAL_HEADER.ImageBase
                     )
                 }
 
                 pe.close()
 
-            except (pefile.PEFormatError, OSError, AttributeError):
+            except (
+                pefile.PEFormatError,
+                OSError,
+                AttributeError
+            ):
                 result["pe_metadata"] = None
 
-            # Extract printable strings without executing the sample.
+            # -------------------------------------------------
+            # 3. Extract printable strings
+            # -------------------------------------------------
             strings_command = shutil.which("strings")
-            extracted_text = ""
 
             if strings_command:
                 try:
                     completed = subprocess.run(
-                        [strings_command, "-a", "-n", "6", sample_path],
+                        [
+                            strings_command,
+                            "-a",
+                            "-n",
+                            "6",
+                            sample_path
+                        ],
                         capture_output=True,
                         text=True,
                         errors="replace",
@@ -605,76 +626,83 @@ def static_file_analysis():
 
                     if completed.returncode == 0:
                         extracted_text = completed.stdout[:1_000_000]
+
                         result["strings"] = (
                             extracted_text.splitlines()[:200]
                         )
 
+                        result["strings_status"] = "Completed"
+                    else:
+                        result["strings_status"] = "Failed"
+
                 except subprocess.TimeoutExpired:
                     result["strings_status"] = "Timed out"
-                         # Analyze DOCX structure without executing its contents.
-                        # Inspect modern Office documents without executing content.
-            result["office_analysis"] = analyze_office_package(
-                sample_path
-            )
 
-            office = result["office_analysis"]
-
-            if office.get("document_text"):
-                extracted_text += "\n" + office["document_text"]
-
-            if office.get("external_relationships"):
-                relationship_targets = " ".join(
-                    item.get("target", "")
-                    for item in office["external_relationships"]
+            else:
+                result["strings_status"] = (
+                    "Skipped: strings executable not found"
                 )
-                extracted_text += "\n" + relationship_targets
 
-            if office.get("document_text"):
-                result["strings"] = list(dict.fromkeys(
-                    result["strings"]
-                    + [office["document_text"]]
-                ))[:200]
-
-
-                        # Analyze supported modern Office packages only.
+            # -------------------------------------------------
+            # 4. Analyze supported Office document packages
+            # -------------------------------------------------
             office_extensions = {
                 ".docx",
                 ".xlsx",
                 ".xlsm",
-                ".pptx",
+                ".pptx"
             }
 
-            extension = os.path.splitext(filename)[1].lower()
+            extension = Path(filename).suffix.lower()
 
             if extension in office_extensions:
-                result["office_analysis"] = analyze_office_package(
-                    sample_path
-                )
+                try:
+                    office = analyze_office_package(sample_path)
+
+                    if not isinstance(office, dict):
+                        office = {
+                            "status": "Unexpected analyzer response"
+                        }
+
+                    result["office_analysis"] = office
+
+                    document_text = office.get("document_text", "")
+
+                    if isinstance(document_text, str):
+                        extracted_text += "\n" + document_text
+
+                    relationships = office.get(
+                        "external_relationships",
+                        []
+                    )
+
+                    if isinstance(relationships, list):
+                        for relationship in relationships:
+                            if not isinstance(relationship, dict):
+                                continue
+
+                            target = relationship.get("target", "")
+
+                            if isinstance(target, str):
+                                extracted_text += "\n" + target
+
+                except Exception:
+                    app.logger.exception(
+                        "Office document analysis failed"
+                    )
+
+                    result["office_analysis"] = {
+                        "status": "Analysis failed"
+                    }
+
             else:
                 result["office_analysis"] = {
                     "status": "Skipped: unsupported Office extension"
                 }
 
-            office = result["office_analysis"]
-
-            # Use extracted Office text for IOC extraction.
-            # Keep the full document text in office_analysis,
-            # rather than adding it as one huge strings entry.
-            if office.get("document_text"):
-                extracted_text += "\n" + office["document_text"]
-
-            # Include external relationship targets in IOC extraction.
-            relationships = office.get("external_relationships", [])
-
-            for relationship in relationships:
-                target = relationship.get("target", "")
-
-                if target:
-                    extracted_text += "\n" + target
-
-
-
-            # Extract candidate URLs and IPv4 addresses from strings.
+            # -------------------------------------------------
+            # 5. Extract candidate URLs and IPv4 addresses
+            # -------------------------------------------------
             url_pattern = re.compile(
                 r"https?://[^\s\"'<>]+",
                 re.IGNORECASE
@@ -695,18 +723,20 @@ def static_file_analysis():
                     address = ipaddress.ip_address(candidate)
 
                     if address.version == 4:
-                        ips.append(candidate)
+                        ips.append(str(address))
 
                 except ValueError:
                     continue
 
             result["indicators"]["urls"] = urls[:100]
+
             result["indicators"]["ipv4_addresses"] = (
                 list(dict.fromkeys(ips))[:100]
             )
 
-            # Run YARA only when a rules file or rules directory
-            # has been explicitly configured.
+            # -------------------------------------------------
+            # 6. Run YARA if rules have been configured
+            # -------------------------------------------------
             rules_path = os.getenv("YARA_RULES_PATH")
 
             if not rules_path:
@@ -722,30 +752,38 @@ def static_file_analysis():
             else:
                 try:
                     if os.path.isfile(rules_path):
-                        rules = yara.compile(filepath=rules_path)
+                        rules = yara.compile(
+                            filepath=rules_path
+                        )
 
                     else:
                         rule_files = {}
 
-                        for root, _, files in os.walk(rules_path):
-                            for rule_file in files:
-                                if rule_file.endswith((".yar", ".yara")):
+                        for root, _, filenames in os.walk(rules_path):
+                            for rule_filename in filenames:
+                                if rule_filename.endswith(
+                                    (".yar", ".yara")
+                                ):
                                     full_path = os.path.join(
-                                        root, rule_file
+                                        root,
+                                        rule_filename
                                     )
 
                                     namespace = os.path.relpath(
-                                        full_path, rules_path
+                                        full_path,
+                                        rules_path
                                     ).replace(os.sep, "_")
 
                                     rule_files[namespace] = full_path
 
                         if not rule_files:
                             raise ValueError(
-                                "No .yar or .yara files found"
+                                "No YARA rule files were found"
                             )
 
-                        rules = yara.compile(filepaths=rule_files)
+                        rules = yara.compile(
+                            filepaths=rule_files
+                        )
 
                     matches = rules.match(
                         sample_path,
@@ -763,63 +801,16 @@ def static_file_analysis():
                         ]
                     }
 
-                except Exception as exc:
-                    app.logger.warning(
-                        "YARA scan failed: %s", type(exc).__name__
-                    )
+                except Exception:
+                    app.logger.exception("YARA analysis failed")
 
                     result["yara"]["status"] = (
                         "Failed: rules could not be compiled or scanned"
                     )
 
-            # Run capa as a separate process with a time limit.
-            capa_command = shutil.which("capa")
-
-            if not capa_command:
-                result["capa"]["status"] = (
-                    "Skipped: capa executable not found"
-                )
-
-            else:
-                try:
-                    completed = subprocess.run(
-                        [capa_command, "-q", sample_path],
-                        capture_output=True,
-                        text=True,
-                        errors="replace",
-                        timeout=45,
-                        check=False
-                    )
-
-                    if completed.returncode == 0:
-                        result["capa"] = {
-                            "status": "Completed",
-                            "output": completed.stdout[:12000]
-                        }
-
-                    else:
-                        result["capa"] = {
-                            "status": "Failed or unsupported file format",
-                            "output": (
-                                completed.stderr or completed.stdout
-                            )[:3000]
-                        }
-
-                except subprocess.TimeoutExpired:
-                    result["capa"]["status"] = "Timed out"
-
-                except OSError:
-                    result["capa"]["status"] = (
-                        "Could not start capa"
-                    )
-
-            return jsonify(result)
-
-        except Exception:
-            app.logger.exception("Static file analysis failed")
-                      # Run CAPA only when PE metadata confirms a Windows
-            # Portable Executable was successfully parsed.
-            # This avoids sending Office documents and PDFs to CAPA.
+            # -------------------------------------------------
+            # 7. Run CAPA only on successfully parsed PE files
+            # -------------------------------------------------
             if result["pe_metadata"] is None:
                 result["capa"]["status"] = (
                     "Skipped: file was not identified as a valid PE"
@@ -836,7 +827,11 @@ def static_file_analysis():
                 else:
                     try:
                         completed = subprocess.run(
-                            [capa_command, "-q", sample_path],
+                            [
+                                capa_command,
+                                "-q",
+                                sample_path
+                            ],
                             capture_output=True,
                             text=True,
                             errors="replace",
@@ -852,7 +847,7 @@ def static_file_analysis():
 
                         else:
                             result["capa"] = {
-                                "status": "Failed",
+                                "status": "Failed or unsupported file format",
                                 "output": (
                                     completed.stderr
                                     or completed.stdout
@@ -867,177 +862,16 @@ def static_file_analysis():
                             "Could not start capa"
                         )
 
+            return jsonify(result)
+
         except Exception:
-            app.logger.exception("Static file analysis failed")
+            app.logger.exception(
+                "Static file analysis failed"
+            )
+
             return jsonify({
                 "error": "Static file analysis failed safely"
             }), 500
-
-@app.post("/api/network/analyze")
-def analyze_network_capture():
-    """Analyze a PCAP/PCAPNG capture using TShark."""
-
-    uploaded_file = request.files.get("capture")
-
-    if not uploaded_file or not uploaded_file.filename:
-        return jsonify({"error": "Please upload a network capture."}), 400
-
-    extension = Path(uploaded_file.filename).suffix.lower()
-
-    if extension not in {".pcap", ".pcapng", ".cap"}:
-        return jsonify({
-            "error": "Unsupported format. Upload PCAP, PCAPNG, or CAP."
-        }), 400
-
-    # Check that the file resembles a supported capture format.
-    magic = uploaded_file.stream.read(4)
-    uploaded_file.stream.seek(0)
-
-    pcap_signatures = {
-        b"\xd4\xc3\xb2\xa1",
-        b"\xa1\xb2\xc3\xd4",
-        b"\x4d\x3c\xb2\xa1",
-        b"\xa1\xb2\x3c\x4d",
-    }
-    pcapng_signature = b"\x0a\x0d\x0d\x0a"
-
-    if magic not in pcap_signatures and magic != pcapng_signature:
-        return jsonify({
-            "error": "The uploaded file does not have a recognized PCAP or PCAPNG header."
-        }), 400
-
-    tshark = shutil.which("tshark")
-
-    if not tshark:
-        return jsonify({
-            "error": "TShark is not installed or is not available in PATH."
-        }), 503
-
-    temporary_path = None
-
-    try:
-        # Use a temporary file and remove it after analysis.
-        with tempfile.NamedTemporaryFile(
-            mode="wb",
-            suffix=extension,
-            dir=UPLOAD_DIR,
-            delete=False
-        ) as temporary_file:
-            temporary_path = Path(temporary_file.name)
-            shutil.copyfileobj(uploaded_file.stream, temporary_file)
-
-        # Analyze no more than the first 5,000 packets in this version.
-        command = [
-            tshark,
-            "-n",
-            "-r", str(temporary_path),
-            "-T", "fields",
-            "-E", "separator=\t",
-            "-e", "frame.number",
-            "-e", "_ws.col.Protocol",
-            "-e", "ip.src",
-            "-e", "ipv6.src",
-            "-e", "ip.dst",
-            "-e", "ipv6.dst",
-            "-e", "dns.qry.name",
-            "-c", "5000",
-        ]
-
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            errors="replace",
-            timeout=45,
-            check=False
-        )
-
-        if result.returncode != 0:
-            app.logger.warning(
-                "TShark could not analyze an uploaded capture."
-            )
-            return jsonify({
-                "error": "TShark could not parse this capture file."
-            }), 400
-
-        protocol_counts = {}
-        source_ips = set()
-        destination_ips = set()
-        dns_queries = set()
-        packet_count = 0
-
-        for line in result.stdout.splitlines():
-            fields = line.split("\t")
-
-            if not fields or not fields[0].strip():
-                continue
-
-            packet_count += 1
-
-            # Fields: number, protocol, IPv4 source, IPv6 source,
-            # IPv4 destination, IPv6 destination, DNS query.
-            fields += [""] * (7 - len(fields))
-
-            protocol = fields[1].strip() or "Unknown"
-            protocol_counts[protocol] = (
-                protocol_counts.get(protocol, 0) + 1
-            )
-
-            for value in (fields[2], fields[3]):
-                value = value.strip()
-                if value:
-                    source_ips.add(value)
-
-            for value in (fields[4], fields[5]):
-                value = value.strip()
-                if value:
-                    destination_ips.add(value)
-
-            for value in fields[6].split(","):
-                value = value.strip()
-                if value:
-                    dns_queries.add(value)
-
-        if packet_count == 0:
-            return jsonify({
-                "error": "No packets could be read from this capture."
-            }), 400
-
-        return jsonify({
-            "status": "success",
-            "filename": Path(uploaded_file.filename).name,
-            "packets_analyzed": packet_count,
-            "packet_limit": 5000,
-            "protocol_counts": protocol_counts,
-            "source_ips": sorted(source_ips)[:100],
-            "destination_ips": sorted(destination_ips)[:100],
-            "dns_queries": sorted(dns_queries)[:100],
-            "note": (
-                "Statistics describe the analyzed packets, up to the "
-                "first 5,000. IP addresses and DNS queries are limited "
-                "to 100 unique values each."
-            )
-        })
-
-    except subprocess.TimeoutExpired:
-        return jsonify({
-            "error": "Network analysis timed out. Try a smaller capture."
-        }), 408
-
-    except OSError:
-        app.logger.exception("Network capture analysis failed.")
-        return jsonify({
-            "error": "The network analysis tool could not be executed."
-        }), 500
-
-    finally:
-        if temporary_path is not None:
-            try:
-                temporary_path.unlink(missing_ok=True)
-            except OSError:
-                app.logger.warning(
-                    "Could not remove a temporary network capture."
-                )
 @app.errorhandler(413)
 def file_too_large(_error):
     return jsonify({
