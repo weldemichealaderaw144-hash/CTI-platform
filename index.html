@@ -1,0 +1,4262 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active CTI Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+       :root {
+    --primary-color: #00e5a0;
+    --secondary-color: #00b8ff;
+    --accent-color: #ff4560;
+    --ai-color: #b388ff;
+    --eth-color: #00e5a0;
+    --space-color: #607d9b;
+    --cosmic-color: #a78bfa;
+    --drone-color: #ffbd4a;
+    --soc-color: #00b8ff;
+    --cti-color: #00e5a0;
+    --link-color: #ff9f43;
+    --employee-color: #b388ff;
+
+    --light-color: #d7e3f4;
+    --dark-color: #070b14;
+    --success-color: #00e5a0;
+    --warning-color: #ffbd4a;
+    --danger-color: #ff4560;
+
+    --panel-color: #0d1422;
+    --border-color: #1d3449;
+    --muted-color: #8295ad;
+
+    --transition: all 0.3s ease;
+}
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+    body {
+    background:
+        radial-gradient(ellipse at top left, rgba(0, 255, 170, 0.08), transparent 40%),
+        radial-gradient(ellipse at bottom right, rgba(0, 153, 255, 0.08), transparent 40%),
+        #070b14;
+    color: #d7e3f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+        
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: rgba(26, 58, 95, 0.95);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-left: 12px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #fff, #a0aec0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--eth-color), var(--ai-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .developer-badge {
+            background: linear-gradient(135deg, var(--cosmic-color), var(--space-color));
+            padding: 0.4rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            margin-left: 1.5rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(107, 70, 193, 0.4);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.8rem;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: #cbd5e0;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            background: linear-gradient(135deg, var(--eth-color), var(--ai-color));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(128, 90, 213, 0.3);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(125deg, rgba(26, 58, 95, 0.9), rgba(45, 125, 50, 0.7)), 
+                        radial-gradient(circle at 20% 80%, rgba(107, 70, 193, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(214, 158, 46, 0.2) 0%, transparent 50%),
+                        url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 700px;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        
+        .hero-content {
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+            background: linear-gradient(90deg, #fff, #a0aec0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+        
+        .developer-credit {
+            margin-top: 2rem;
+            font-style: italic;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .platform-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .platform-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+        }
+        
+        .platform-badge:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-color), #c53030);
+            color: white;
+            padding: 1rem 2.2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(229, 62, 62, 0.5);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-ai {
+            background: linear-gradient(135deg, var(--ai-color), #6b46c1);
+            box-shadow: 0 4px 15px rgba(128, 90, 213, 0.4);
+        }
+        
+        .btn-ai:hover {
+            box-shadow: 0 8px 25px rgba(128, 90, 213, 0.5);
+        }
+        
+        .btn-eth {
+            background: linear-gradient(135deg, var(--eth-color), #236327);
+            box-shadow: 0 4px 15px rgba(45, 125, 50, 0.4);
+        }
+        
+        .btn-eth:hover {
+            box-shadow: 0 8px 25px rgba(45, 125, 50, 0.5);
+        }
+        
+        .btn-drone {
+            background: linear-gradient(135deg, var(--drone-color), #b5892b);
+            box-shadow: 0 4px 15px rgba(214, 158, 46, 0.4);
+        }
+        
+        .btn-drone:hover {
+            box-shadow: 0 8px 25px rgba(214, 158, 46, 0.5);
+        }
+        
+        .btn-soc {
+            background: linear-gradient(135deg, var(--soc-color), #2b6cb0);
+            box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4);
+        }
+        
+        .btn-soc:hover {
+            box-shadow: 0 8px 25px rgba(49, 130, 206, 0.5);
+        }
+        
+        .btn-cti {
+            background: linear-gradient(135deg, var(--cti-color), #2f855a);
+            box-shadow: 0 4px 15px rgba(56, 161, 105, 0.4);
+        }
+        
+        .btn-cti:hover {
+            box-shadow: 0 8px 25px rgba(56, 161, 105, 0.5);
+        }
+        
+        .btn-link {
+            background: linear-gradient(135deg, var(--link-color), #c05621);
+            box-shadow: 0 4px 15px rgba(221, 107, 32, 0.4);
+        }
+        
+        .btn-link:hover {
+            box-shadow: 0 8px 25px rgba(221, 107, 32, 0.5);
+        }
+        
+     
+        
+   
+        
+       
+        
+        /* Main Content */
+        .main-content {
+            padding: 4rem 0;
+        }
+        
+        /* Unified Dashboard */
+        .unified-dashboard {
+            margin-bottom: 4rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .dashboard-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--eth-color));
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .dashboard-card.ai-card {
+            border-top: 4px solid var(--ai-color);
+        }
+        
+        .dashboard-card.drone-card {
+            border-top: 4px solid var(--drone-color);
+        }
+        
+        .dashboard-card.soc-card {
+            border-top: 4px solid var(--soc-color);
+        }
+        
+        .dashboard-card.cti-card {
+            border-top: 4px solid var(--cti-color);
+        }
+        
+        .dashboard-card.link-card {
+            border-top: 4px solid var(--link-color);
+        }
+        
+       
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-header h3 {
+            color: #e2e8f0;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        
+        .card-icon {
+            font-size: 2.2rem;
+        }
+        
+        .ai-icon {
+            color: var(--ai-color);
+        }
+        
+        .drone-icon {
+            color: var(--drone-color);
+        }
+        
+        .soc-icon {
+            color: var(--soc-color);
+        }
+        
+        .cti-icon {
+            color: var(--cti-color);
+        }
+        
+        .link-icon {
+            color: var(--link-color);
+        }
+      
+        .threat-level {
+            display: flex;
+            align-items: center;
+            margin: 1.2rem 0;
+        }
+        
+        .threat-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 0 10px;
+        }
+        
+        .threat-low {
+            background-color: var(--success-color);
+            box-shadow: 0 0 10px var(--success-color);
+        }
+        
+        .threat-medium {
+            background-color: var(--warning-color);
+            box-shadow: 0 0 10px var(--warning-color);
+        }
+        
+        .threat-high {
+            background-color: var(--danger-color);
+            box-shadow: 0 0 10px var(--danger-color);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e2e8f0;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: #a0aec0;
+            font-weight: 600;
+        }
+        
+        /* Section Styles */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #e2e8f0;
+            font-size: 2.5rem;
+            font-weight: 800;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--eth-color), var(--ai-color));
+            border-radius: 2px;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #a0aec0;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+        
+        /* Tools Integration Section */
+        .tools-integration {
+            margin-bottom: 4rem;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        
+        .tool-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+        
+        .tool-card.ai-tool {
+            border-top: 4px solid var(--ai-color);
+        }
+        
+        .tool-card.drone-tool {
+            border-top: 4px solid var(--drone-color);
+        }
+        
+        .tool-card.soc-tool {
+            border-top: 4px solid var(--soc-color);
+        }
+        
+        .tool-card.cti-tool {
+            border-top: 4px solid var(--cti-color);
+        }
+        
+        .tool-card.link-tool {
+            border-top: 4px solid var(--link-color);
+        }
+        
+        
+        
+        .tool-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ai-tool .tool-icon {
+            color: var(--ai-color);
+        }
+        
+        .drone-tool .tool-icon {
+            color: var(--drone-color);
+        }
+        
+        .soc-tool .tool-icon {
+            color: var(--soc-color);
+        }
+        
+        .cti-tool .tool-icon {
+            color: var(--cti-color);
+        }
+        
+        .link-tool .tool-icon {
+            color: var(--link-color);
+        }
+        
+      
+        
+        .tool-card h4 {
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        
+        .tool-card p {
+            color: #a0aec0;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .tool-status {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+        
+        .status-active {
+            background-color: rgba(56, 161, 105, 0.2);
+            color: #68d391;
+            border: 1px solid rgba(56, 161, 105, 0.3);
+        }
+        
+        .status-inactive {
+            background-color: rgba(229, 62, 62, 0.2);
+            color: #fc8181;
+            border: 1px solid rgba(229, 62, 62, 0.3);
+        }
+        
+        /* Feature Sections */
+        .feature-section {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 2.5rem;
+            margin-bottom: 4rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-top: 5px solid;
+        }
+        
+        .feature-section.drone-section {
+            border-top-color: var(--drone-color);
+        }
+        
+        .feature-section.soc-section {
+            border-top-color: var(--soc-color);
+        }
+        
+        .feature-section.cti-section {
+            border-top-color: var(--cti-color);
+        }
+        
+        .feature-section.link-section {
+            border-top-color: var(--link-color);
+        }
+        
+       
+        
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .monitor-map {
+            height: 400px;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-radius: 12px;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .drone-marker {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: var(--drone-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px var(--drone-color);
+            border: 3px solid white;
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        
+        .soc-grid, .cti-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .soc-main, .cti-main, .soc-sidebar, .cti-sidebar {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .soc-item, .cti-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .soc-item:last-child, .cti-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .confidence-meter {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-top: 0.8rem;
+            overflow: hidden;
+        }
+        
+        .confidence-level {
+            height: 100%;
+            border-radius: 5px;
+        }
+        
+        .confidence-high {
+            background-color: var(--success-color);
+        }
+        
+        .confidence-medium {
+            background-color: var(--warning-color);
+        }
+        
+        .confidence-low {
+            background-color: var(--danger-color);
+        }
+        
+        .cti-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .cti-stat {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .cti-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Enhanced Detection Section */
+        .detection-tabs {
+            display: flex;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .detection-tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-weight: 600;
+            color: #a0aec0;
+        }
+        
+        .detection-tab.active {
+            background: linear-gradient(135deg, var(--link-color), #c05621);
+            color: white;
+            box-shadow: 0 4px 12px rgba(221, 107, 32, 0.3);
+        }
+        
+        .detection-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .scanner-input {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        .scanner-input input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px 0 0 8px;
+            font-size: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            color: #e2e8f0;
+        }
+        
+        .scanner-input button {
+            background: linear-gradient(135deg, var(--link-color), #c05621);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        
+        .scanner-input button:hover {
+            background: linear-gradient(135deg, #c05621, var(--link-color));
+        }
+        
+        .scan-results {
+            margin-top: 1.5rem;
+        }
+        
+        .result-item {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            border: 1px solid;
+        }
+        
+        .result-safe {
+            background-color: rgba(56, 161, 105, 0.1);
+            color: #68d391;
+            border-color: rgba(56, 161, 105, 0.3);
+        }
+        
+        .result-suspicious {
+            background-color: rgba(214, 158, 46, 0.1);
+            color: #f6e05e;
+            border-color: rgba(214, 158, 46, 0.3);
+        }
+        
+        .result-malicious {
+            background-color: rgba(229, 62, 62, 0.1);
+            color: #fc8181;
+            border-color: rgba(229, 62, 62, 0.3);
+        }
+        
+        .result-icon {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--link-color);
+            background: rgba(221, 107, 32, 0.05);
+        }
+        
+        .file-upload-area.dragover {
+            border-color: var(--link-color);
+            background: rgba(221, 107, 32, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--link-color);
+            margin-bottom: 1rem;
+        }
+        
+        .file-info {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .community-sharing {
+            background: linear-gradient(135deg, rgba(56, 161, 105, 0.1), rgba(56, 161, 105, 0.05));
+            border: 1px solid rgba(56, 161, 105, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .community-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .community-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .threat-indicators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .threat-indicator-item {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 4px solid;
+        }
+        
+        .threat-indicator-item.malicious {
+            border-left-color: var(--danger-color);
+            background: rgba(229, 62, 62, 0.05);
+        }
+        
+        .threat-indicator-item.suspicious {
+            border-left-color: var(--warning-color);
+            background: rgba(214, 158, 46, 0.05);
+        }
+        
+        .threat-indicator-item.clean {
+            border-left-color: var(--success-color);
+            background: rgba(56, 161, 105, 0.05);
+        }
+        
+        .analysis-progress {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--link-color), #c05621);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .analysis-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+        
+        .analysis-step {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .analysis-step.active {
+            color: var(--link-color);
+            font-weight: 600;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sign-in-prompt {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        
+        
+        .risk-high {
+            border-left-color: var(--danger-color);
+            background: rgba(229, 62, 62, 0.05);
+        }
+        
+        .risk-medium {
+            border-left-color: var(--warning-color);
+            background: rgba(214, 158, 46, 0.05);
+        }
+        
+        .risk-low {
+            border-left-color: var(--success-color);
+            background: rgba(56, 161, 105, 0.05);
+        }
+        
+        .activity-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .activity-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .activity-item {
+            position: relative;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--ai-color);
+        }
+        
+        .policy-violation {
+            background: rgba(229, 62, 62, 0.1);
+            border: 1px solid rgba(229, 62, 62, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .productivity-meter {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .productivity-level {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+       
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            width: 90%;
+            max-width: 1000px;
+            height: 80%;
+            border-radius: 16px;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-logo .logo-icon {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+        
+        .footer-logo h2 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #fff, #a0aec0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .footer-links {
+            display: flex;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .footer-links a {
+            color: #cbd5e0;
+            margin: 0 1.5rem;
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            color: #a0aec0;
+            font-size: 0.95rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .soc-grid, .cti-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1.5rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            nav ul li {
+                margin: 0.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+
+                gap: 1rem;
+            }
+            
+            .platform-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .dashboard-grid,
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .footer-links a {
+                margin: 0.5rem 0;
+            }
+            
+            .detection-tabs {
+                flex-direction: column;
+            }
+        }
+        
+        /* Enhanced Authentication Styles */
+        .auth-modal-content {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-header h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-header p {
+            color: #a0aec0;
+        }
+        
+        .auth-form {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--ai-color);
+            box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.2);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #a0aec0;
+        }
+        
+        .forgot-password {
+            color: var(--ai-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            color: #a0aec0;
+        }
+        
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .auth-divider span {
+            padding: 0 1rem;
+        }
+        
+        .social-auth {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .social-btn.google:hover {
+            background: rgba(219, 68, 55, 0.1);
+            border-color: rgba(219, 68, 55, 0.3);
+        }
+        
+        .social-btn.microsoft:hover {
+            background: rgba(0, 120, 215, 0.1);
+            border-color: rgba(0, 120, 215, 0.3);
+        }
+        
+        .auth-footer {
+            text-align: center;
+            color: #a0aec0;
+        }
+        
+        .auth-footer a {
+            color: var(--ai-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Loading Animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 3000;
+            max-width: 300px;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .notification.success {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .notification.error {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .notification.warning {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .notification.info {
+            background: var(--ai-color);
+            color: white;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+
+       /* ===== CYBERSECURITY THEME ===== */
+
+html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #070b14;
+    color: #d7e3f4;
+}
+
+/* Main panels and dashboard cards */
+.card,
+.panel,
+.stat-card,
+.dashboard-card,
+.modal-content {
+    background: rgba(13, 20, 34, 0.96);
+    border: 1px solid #1d3449;
+    border-radius: 10px;
+    color: #d7e3f4;
+    transition: var(--transition);
+}
+
+/* Subtle interactive border */
+.card:hover,
+.panel:hover,
+.stat-card:hover,
+.dashboard-card:hover {
+    border-color: #00b8ff;
+    box-shadow: 0 0 14px rgba(0, 184, 255, 0.09);
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4 {
+    color: #00e5a0;
+    letter-spacing: 0.4px;
+}
+
+/* Buttons */
+button,
+.btn,
+input[type="button"],
+input[type="submit"] {
+    transition: var(--transition);
+}
+
+button:hover,
+.btn:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    filter: brightness(1.15);
+}
+
+/* Form controls */
+input,
+select,
+textarea {
+    background: #080f1c;
+    color: #d7e3f4;
+    border: 1px solid #29415a;
+    border-radius: 6px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #00b8ff;
+    box-shadow: 0 0 0 2px rgba(0, 184, 255, 0.14);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #101e30;
+    color: #00e5a0;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #1d3449;
+}
+
+tr:hover td {
+    background: rgba(0, 184, 255, 0.04);
+}
+
+/* Links */
+a {
+    color: #00b8ff;
+}
+
+a:hover {
+    color: #00e5a0;
+}
+
+/* Code and technical indicators */
+code,
+pre {
+    background: #080f1c;
+    color: #00e5a0;
+    border: 1px solid #1d3449;
+    border-radius: 5px;
+}
+
+/* Keyboard accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid #00b8ff;
+    outline-offset: 3px;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+        
+
+
+
+/* ==========================================
+   CYBER CTI DASHBOARD — VISUAL ENHANCEMENTS
+   ========================================== */
+
+/* Main page container */
+.container {
+    width: min(96%, 1500px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Dashboard layout */
+.unified-dashboard {
+    margin-top: 28px;
+    margin-bottom: 32px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* Dashboard cards */
+.dashboard-card {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    padding: 22px;
+    background: linear-gradient(145deg, #101b2d, #0a111e);
+    border: 1px solid #20364c;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.18);
+    transition: border-color 0.25s ease,
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+/* Subtle cyber accent */
+.dashboard-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        #00e5a0,
+        #00b8ff,
+        transparent
+    );
+    opacity: 0.8;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    border-color: #00b8ff;
+    box-shadow: 0 8px 26px rgba(0, 184, 255, 0.09);
+}
+
+/* Card headings */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.card-header h3,
+.card-header h4 {
+    margin: 0;
+    color: #d7e3f4;
+}
+
+.card-header p {
+    margin-top: 4px;
+    color: #8295ad;
+    font-size: 0.88rem;
+}
+
+/* Card icons */
+.card-icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid #29415a;
+    border-radius: 10px;
+    background: #101e30;
+    font-size: 20px;
+}
+
+/* Statistics grid */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.stat-item {
+    min-width: 0;
+    padding: 13px 10px;
+    background: rgba(4, 12, 23, 0.65);
+    border: 1px solid #1b2c40;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-value {
+    color: #00e5a0;
+    font-size: clamp(1.15rem, 2vw, 1.7rem);
+    font-weight: 700;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.stat-label {
+    margin-top: 5px;
+    color: #8295ad;
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+/* Platform badges */
+.platform-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.platform-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #0d1929;
+    border: 1px solid #20364c;
+    border-radius: 6px;
+    color: #b8c9dc;
+    font-size: 0.85rem;
+}
+
+.platform-badge i {
+    color: #00e5a0;
+}
+
+/* Responsive dashboard */
+@media (max-width: 850px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-card {
+        padding: 16px;
+    }
+
+    .stats {
+        gap: 7px;
+    }
+
+    .stat-item {
+        padding: 10px 5px;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+    }
+}
+
+/* Reduce motion when requested by the operating system */
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-card {
+        transition: none;
+    }
+
+    .dashboard-card:hover {
+        transform: none;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   CYBER SOC HEADER AND NAVIGATION
+   ========================================== */
+
+/* Main header */
+header {
+    position: relative;
+    background: linear-gradient(
+        110deg,
+        #080f1c 0%,
+        #0d1929 55%,
+        #0a1422 100%
+    );
+    border-bottom: 1px solid #1d3449;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+}
+
+/* Header content layout */
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+/* Developer badge */
+.developer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: rgba(0, 229, 160, 0.08);
+    border: 1px solid rgba(0, 229, 160, 0.3);
+    border-radius: 5px;
+    color: #00e5a0;
+    font-size: 0.78rem;
+    letter-spacing: 0.5px;
+}
+
+/* Notification indicator */
+.notification-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    min-height: 20px;
+    padding: 2px 6px;
+    background: #ff4560;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50px;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+/* Platform introduction */
+.platform-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+/* Individual platform labels */
+.platform-badge {
+    padding: 8px 12px;
+    background: #0d1929;
+    border: 1px solid #20364c;
+    border-radius: 6px;
+    color: #b8c9dc;
+    transition: border-color 0.2s ease,
+                color 0.2s ease;
+}
+
+.platform-badge:hover {
+    border-color: #00b8ff;
+    color: #00e5a0;
+}
+
+/* Header icons */
+.header-content i {
+    color: #00b8ff;
+}
+
+/* Responsive header */
+@media (max-width: 600px) {
+    .header-content {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .platform-badges {
+        gap: 7px;
+    }
+
+    .platform-badge {
+        padding: 7px 9px;
+        font-size: 0.78rem;
+    }
+}
+
+/* Accessibility: respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .platform-badge {
+        transition: none;
+    }
+}
+
+
+/* ==========================================
+   CTI ANALYSIS CONSOLE — SOC DARK THEME
+   ========================================== */
+
+/* Analysis navigation tabs */
+.detection-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 24px 0;
+    padding: 8px;
+    background: #0b1422;
+    border: 1px solid #203449;
+    border-radius: 12px;
+}
+
+.detection-tab {
+    flex: 1 1 150px;
+    padding: 13px 16px;
+    text-align: center;
+    color: #9db1c7;
+    background: #111d2d;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease,
+                border-color 0.2s ease;
+}
+
+.detection-tab i {
+    margin-right: 7px;
+}
+
+.detection-tab:hover {
+    color: #67e8f9;
+    background: #14283b;
+    border-color: #24506a;
+}
+
+.detection-tab.active {
+    color: #00e5a0;
+    background: rgba(0, 229, 160, 0.08);
+    border-color: #00a878;
+    box-shadow: inset 0 -2px 0 #00e5a0;
+}
+
+/* Analysis tab content */
+.tab-content {
+    margin-top: 16px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* URL, IP and search input rows */
+.scanner-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 18px;
+    background: #0b1422;
+    border: 1px solid #203449;
+    border-radius: 12px;
+}
+
+.scanner-input input {
+    flex: 1 1 280px;
+    min-width: 0;
+    padding: 13px 15px;
+    color: #e2edf8;
+    background: #07101d;
+    border: 1px solid #2b4359;
+    border-radius: 8px;
+    outline: none;
+}
+
+.scanner-input input::placeholder {
+    color: #71869d;
+}
+
+.scanner-input input:focus {
+    border-color: #00b8ff;
+    box-shadow: 0 0 0 3px rgba(0, 184, 255, 0.12);
+}
+
+.scanner-input button {
+    padding: 12px 18px;
+    color: #04131a;
+    background: #00e5a0;
+    border: 1px solid #00e5a0;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.scanner-input button:hover {
+    background: #4dffc5;
+    transform: translateY(-1px);
+}
+
+/* Results panels */
+.scan-results {
+    margin-top: 18px;
+    color: #d8e5f2;
+    overflow-wrap: anywhere;
+}
+
+.scan-results:empty {
+    display: none;
+}
+
+/* File upload panel */
+.file-upload-area {
+    padding: 34px 22px;
+    text-align: center;
+    background: #0b1422;
+    border: 2px dashed #2b526a;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.file-upload-area:hover {
+    background: #102034;
+    border-color: #00b8ff;
+}
+
+.file-upload-area h3 {
+    color: #e2edf8;
+    margin: 14px 0 8px;
+}
+
+.file-upload-area p {
+    color: #9db1c7;
+}
+
+.file-upload-area .upload-icon {
+    color: #00b8ff;
+    font-size: 2.5rem;
+}
+
+/* Selected file information */
+.file-info {
+    margin-top: 16px;
+    padding: 18px;
+    color: #d8e5f2;
+    background: #0b1422;
+    border: 1px solid #2b4359;
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+}
+
+.file-info strong {
+    color: #67e8f9;
+}
+
+/* Threat indicator cards */
+.threat-indicators {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.threat-indicator-item {
+    padding: 16px;
+    background: #0b1422;
+    border: 1px solid #203449;
+    border-left: 4px solid #71869d;
+    border-radius: 10px;
+}
+
+.threat-indicator-item.malicious {
+    border-left-color: #ff5364;
+}
+
+.threat-indicator-item.suspicious {
+    border-left-color: #ffbf47;
+}
+
+.threat-indicator-item.clean {
+    border-left-color: #00e5a0;
+}
+
+/* Result cards generated by analysis */
+.result-item {
+    margin: 12px 0;
+    padding: 16px;
+    background: #0b1422;
+    border: 1px solid #203449;
+    border-radius: 10px;
+}
+
+.result-icon {
+    color: #00b8ff;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+    .detection-tabs {
+        gap: 6px;
+        padding: 6px;
+    }
+
+    .detection-tab {
+        flex-basis: 100%;
+    }
+
+    .scanner-input {
+        padding: 12px;
+    }
+
+    .scanner-input button {
+        width: 100%;
+    }
+
+    .file-upload-area {
+        padding: 24px 14px;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h1>ETH-DF CyberShield AI</h1>
+                    <div class="developer-badge">By weldemichael</div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="#tools"><i class="fas fa-tools"></i> Security Tools</a></li>
+                        <li><a href="#drone"><i class="fas fa-drone"></i> Anti-Drone</a></li>
+                        <li><a href="#soc"><i class="fas fa-user-shield"></i> SOC</a></li>
+                        <li><a href="#cti"><i class="fas fa-brain"></i> Threat Intel</a></li>
+                        <li><a href="#detection"><i class="fas fa-search"></i> Threat Detection</a></li>
+                        <li style="position: relative;">
+                            <a href="#"><i class="fas fa-bell"></i></a>
+                            <div class="notification-badge">3</div>
+                        </li>
+                        <li><a href="#" style="background: rgba(255,255,255,0.1);" onclick="showSignInModal()"><i class="fas fa-user"></i> Sign In</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Complete Cybersecurity Defense Platform</h2>
+                <p>Advanced AI-powered security with integrated anti-drone detection, CTI tools, SOC operations, space physics applications, employee monitoring, and modern threat prevention systems</p>
+                <div style="display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <a href="#tools" class="btn btn-ai">Explore Security Tools</a>
+                    <a href="#detection" class="btn btn-link">Threat Detection</a>
+                   
+                </div>
+                <div class="developer-credit">
+                    Developed by weldemichael - Cyber security CTI analyst.
+                </div>
+                <div class="platform-badges">
+                    <div class="platform-badge"><i class="fas fa-robot"></i> AI-Powered Security</div>
+                    <div class="platform-badge"><i class="fas fa-drone"></i> Anti-Drone Systems</div>
+                    <div class="platform-badge"><i class="fas fa-brain"></i> Threat Intelligence</div>
+                    <div class="platform-badge"><i class="fas fa-shield-alt"></i> SOC Integration</div>
+                    <div class="platform-badge"><i class="fas fa-link"></i> Link Detection</div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <!-- Unified Dashboard -->
+            <section class="unified-dashboard">
+                <h2 class="section-title">Unified Security Dashboard</h2>
+                <p class="section-subtitle">Real-time monitoring across all security domains with integrated AI analysis, space physics applications, employee monitoring, and advanced threat detection</p>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card ai-card">
+                        <div class="card-header">
+                            <h3>AI Threat Detection</h3>
+                            <div class="card-icon ai-icon"><i class="fas fa-brain"></i></div>
+                        </div>
+                        <div class="threat-level">
+                            <div class="threat-indicator threat-medium"></div>
+                            <span>AI Analysis: Medium Risk</span>
+                        </div>
+                        <p>Advanced AI systems monitoring 8,742 endpoints with 99.1% accuracy in threat identification and automated response.</p>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <div class="stat-value">8,742</div>
+                                <div class="stat-label">Endpoints</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">99.1%</div>
+                                <div class="stat-label">Accuracy</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">284</div>
+                                <div class="stat-label">Threats Blocked</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card drone-card">
+                        <div class="card-header">
+                            <h3>Anti-Drone Defense</h3>
+                            <div class="card-icon drone-icon"><i class="fas fa-drone"></i></div>
+                        </div>
+                        <div class="threat-level">
+                            <div class="threat-indicator threat-low"></div>
+                            <span>Low Drone Activity</span>
+                        </div>
+                        <p>Multi-spectrum drone detection across 15km radius with 96.7% identification accuracy and automated countermeasures.</p>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <div class="stat-value">15km</div>
+                                <div class="stat-label">Coverage</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">96.7%</div>
+                                <div class="stat-label">Accuracy</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Active Drones</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card soc-card">
+                        <div class="card-header">
+                            <h3>SOC Operations</h3>
+                            <div class="card-icon soc-icon"><i class="fas fa-user-shield"></i></div>
+                        </div>
+                        <div class="threat-level">
+                            <div class="threat-indicator threat-medium"></div>
+                            <span>Active Monitoring</span>
+                        </div>
+                        <p>24/7 Security Operations Center with 18 analysts monitoring 342 critical assets and 15,000+ security events daily.</p>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <div class="stat-value">342</div>
+                                <div class="stat-label">Critical Assets</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">18</div>
+                                <div class="stat-label">Analysts</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">15K+</div>
+                                <div class="stat-label">Daily Events</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card cti-card">
+                        <div class="card-header">
+                            <h3>Threat Intelligence</h3>
+                            <div class="card-icon cti-icon"><i class="fas fa-search"></i></div>
+                        </div>
+                        <div class="threat-level">
+                            <div class="threat-indicator threat-high"></div>
+                            <span>High Intel Activity</span>
+                        </div>
+                        <p>Real-time correlation of 542 threat feeds with 1,284 new IOCs identified and 42 campaigns actively tracked.</p>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <div class="stat-value">542</div>
+                                <div class="stat-label">Threat Feeds</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">1,284</div>
+                                <div class="stat-label">New IOCs</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">42</div>
+                                <div class="stat-label">Campaigns</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card link-card">
+                        <div class="card-header">
+                            <h3>Suspicious Link Detection</h3>
+                            <div class="card-icon link-icon"><i class="fas fa-link"></i></div>
+                        </div>
+                        <div class="threat-level">
+                            <div class="threat-indicator threat-medium"></div>
+                            <span>Active Phishing Campaigns</span>
+                        </div>
+                        <p>AI-powered URL analysis with 98.9% accuracy in detecting phishing, malware, and social engineering attempts.</p>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <div class="stat-value">12,487</div>
+                                <div class="stat-label">URLs Scanned</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">98.9%</div>
+                                <div class="stat-label">Accuracy</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">142</div>
+                                <div class="stat-label">Malicious Links</div>
+                            </div>
+                        </div>
+                    </div>
+
+                
+            </section>
+
+            <!-- Tools Integration Section -->
+            <section id="tools" class="tools-integration">
+                <h2 class="section-title">Integrated Security Tools</h2>
+                <p class="section-subtitle">Comprehensive suite of advanced cybersecurity tools working in unison for complete protection</p>
+                
+                <div class="tools-grid">
+                    <div class="tool-card ai-tool">
+                        <div class="tool-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h4>AI-Powered Security</h4>
+                        <p>Advanced machine learning algorithms for real-time threat detection, behavioral analysis, and automated incident response with 99.3% accuracy.</p>
+                        <div class="tool-status status-active">Active</div>
+                    </div>
+                    
+                    <div class="tool-card drone-tool">
+                        <div class="tool-icon">
+                            <i class="fas fa-drone"></i>
+                        </div>
+                        <h4>Anti-Drone Defense System</h4>
+                        <p>Multi-layered drone detection and mitigation using RF analysis, computer vision, and AI-powered classification with 15km operational range.</p>
+                        <div class="tool-status status-active">Active</div>
+                    </div>
+                    
+                    <div class="tool-card soc-tool">
+                        <div class="tool-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h4>SOC Automation</h4>
+                        <p>24/7 Security Operations Center with AI-assisted analysis, automated playbooks, and integrated incident management across all security layers.</p>
+                        <div class="tool-status status-active">Active</div>
+                    </div>
+                    
+                    <div class="tool-card cti-tool">
+                        <div class="tool-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4>Threat Intelligence Platform</h4>
+                        <p>Real-time correlation of global threat data, predictive analytics, and automated IOC distribution with 542 integrated intelligence feeds.</p>
+                        <div class="tool-status status-active">Active</div>
+                    </div>
+                    
+                    <div class="tool-card link-tool">
+                        <div class="tool-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h4>Suspicious Link Detection</h4>
+                        <p>AI-powered URL analysis with 98.9% accuracy in detecting phishing, malware distribution, and social engineering attempts in real-time.</p>
+                        <div class="tool-status status-active">Active</div>
+                    </div>
+                    
+                    
+            </section>
+
+            <!-- Enhanced Threat Detection Section -->
+            <section id="detection" class="feature-section" style="border-top-color: var(--link-color);">
+                <div class="feature-header">
+                    <h2 class="section-title" style="margin-bottom: 0; text-align: left;">AI Threat Detection</h2>
+                    <div class="platform-badge" style="background: rgba(221, 107, 32, 0.2);">
+                        <i class="fas fa-robot"></i> AI-Powered Analysis
+                    </div>
+                </div>
+                
+                <p class="section-subtitle" style="text-align: left; margin-bottom: 2rem;">
+                    AI analyzes suspicious files, domains, IPs and URLs to detect malware and other breaches, automatically sharing them with the security community.
+                </p>
+
+                <!-- Detection Tabs -->
+<div class="detection-tabs">
+    <div class="detection-tab active" data-tab="url">
+        <i class="fas fa-link"></i> URL Analysis
+    </div>
+
+    <div class="detection-tab" data-tab="ip">
+        <i class="fas fa-network-wired"></i> IP Address
+    </div>
+
+    <div class="detection-tab" data-tab="file">
+        <i class="fas fa-file"></i> File Analysis
+    </div>
+
+    <div class="detection-tab" data-tab="network">
+        <i class="fas fa-network-wired"></i> Network Traffic Analysis
+    </div>
+
+    <div class="detection-tab" data-tab="behavior">
+        <i class="fas fa-chart-line"></i> Behavioral Analysis
+    </div>
+
+    <div class="detection-tab" data-tab="memory">
+        <i class="fas fa-memory"></i> Memory Forensics
+    </div>
+
+    <div class="detection-tab" data-tab="logs">
+        <i class="fas fa-clipboard-list"></i> Log Analysis and Threat Hunting
+    </div>
+
+    <div class="detection-tab" data-tab="search">
+        <i class="fas fa-search"></i> Search
+    </div>
+</div>
+                <!-- URL Analysis Tab -->
+                <div class="tab-content active" id="url-tab">
+                    <div class="scanner-input">
+                        <input type="text" id="urlInput" placeholder="https://example.com" value="https://secure-login.bank-verification.com">
+                        <button onclick="analyzeThreat('url')"><i class="fas fa-search"></i> Analyze URL</button>
+                    </div>
+                    
+                    <div class="scan-results" id="urlResults">
+                        <!-- URL results will appear here -->
+                    </div>
+                </div>
+
+                <!-- IP Analysis Tab -->
+                <div class="tab-content" id="ip-tab">
+                    <div class="scanner-input">
+                        <input type="text" id="ipInput" placeholder="192.168.1.1" value="185.159.157.10">
+                        <button onclick="analyzeThreat('ip')"><i class="fas fa-search"></i> Analyze IP</button>
+                    </div>
+                    
+                    <div class="scan-results" id="ipResults">
+                        <!-- IP results will appear here -->
+                    </div>
+                </div>
+
+                <!-- File Analysis Tab -->
+                <div class="tab-content" id="file-tab">
+                    <div class="file-upload-area" id="fileDropArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Upload File for Analysis</h3>
+                        <p>Drag & drop files here or click to browse</p>
+                        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+                            Supports: EXE, DLL, PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX (Max 100MB)
+                        </p>
+                        <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(this.files)">
+                    </div>
+                    
+                    <div class="file-info" id="fileInfo">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong id="fileName">file.exe</strong>
+                                <div style="font-size: 0.8rem; color: #a0aec0;" id="fileDetails">Size: 2.4 MB | Type: Application</div>
+                            </div>
+                            <button class="btn btn-link" onclick="analyzeThreat('file')">
+                                <i class="fas fa-shield-alt"></i> Analyze File
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="scan-results" id="fileResults">
+                        <!-- File results will appear here -->
+                    </div>
+                </div>
+               
+
+
+
+                  <!-- Network Traffic Analysis Tab -->
+<div class="tab-content" id="network-tab">
+
+    <div class="file-upload-area" id="networkDropArea">
+        <div class="upload-icon">
+            <i class="fas fa-network-wired"></i>
+        </div>
+
+        <h3>Upload Network Capture for Analysis</h3>
+
+        <p>Drag &amp; drop a network capture file here or click to browse.</p>
+
+        <p style="font-size: 0.9rem; color: #a0aec0; margin-top: 0.5rem;">
+            Supported formats: PCAP, PCAPNG, CAP (Max 100 MB)
+        </p>
+
+        <input
+            type="file"
+            id="networkFileInput"
+            accept=".pcap,.pcapng,.cap,application/vnd.tcpdump.pcap"
+            style="display: none;"
+        >
+    </div>
+
+    <!-- Selected Network Capture -->
+    <div class="file-info" id="networkFileInfo" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 15px;">
+            <div>
+                <strong id="networkFileName">No file selected</strong>
+
+                <div
+                    style="font-size: 0.8rem; color: #a0aec0;"
+                    id="networkFileDetails"
+                >
+                    Network capture details will appear here.
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="btn btn-link"
+                id="analyzeNetworkButton"
+            >
+                <i class="fas fa-shield-alt"></i>
+                Analyze Traffic
+            </button>
+        </div>
+    </div>
+
+    <!-- Network Analysis Results -->
+    <div class="scan-results" id="networkResults">
+        <!-- Network analysis results will appear here -->
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+                <!-- Search Tab -->
+                <div class="tab-content" id="search-tab">
+                    <div class="scanner-input">
+                        <input type="text" id="searchInput" placeholder="Search for threats, malware families, or indicators...">
+                        <button onclick="analyzeThreat('search')"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                    
+                    <div class="scan-results" id="searchResults">
+                        <!-- Search results will appear here -->
+                    </div>
+                </div>
+
+                <!-- Community Sharing -->
+                <div class="community-sharing">
+                    <h3 style="color: var(--cti-color); margin-bottom: 1rem;">
+                        <i class="fas fa-share-alt"></i> Community Threat Sharing
+                    </h3>
+                    <p>Automatically share detected threats with the global security community to help protect others from emerging threats.</p>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="autoShare" checked> Auto-share detected threats
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="shareAnonymously"> Share anonymously
+                        </label>
+                    </div>
+                    
+                    <div class="community-stats">
+                        <div class="community-stat">
+                            <div class="stat-value">42,857</div>
+                            <div class="stat-label">Threats Shared</div>
+                        </div>
+                        <div class="community-stat">
+                            <div class="stat-value">1.2M</div>
+                            <div class="stat-label">Community Members</div>
+                        </div>
+                        <div class="community-stat">
+                            <div class="stat-value">284</div>
+                            <div class="stat-label">Threats Prevented</div>
+                        </div>
+                        <div class="community-stat">
+                            <div class="stat-value">96.7%</div>
+                            <div class="stat-label">Detection Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Threat Intelligence Indicators -->
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: var(--link-color); margin-bottom: 1rem;">Recent Threat Indicators</h3>
+                    <div class="threat-indicators">
+                        <div class="threat-indicator-item malicious">
+                            <h4><i class="fas fa-skull-crossbones"></i> Malicious IP</h4>
+                            <p>185.159.157.10</p>
+                            <div style="font-size: 0.8rem; color: #fc8181;">
+                                Associated with: Phishing campaign
+                            </div>
+                        </div>
+                        <div class="threat-indicator-item suspicious">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Suspicious Domain</h4>
+                            <p>secure-login.bank-verification.com</p>
+                            <div style="font-size: 0.8rem; color: #f6e05e;">
+                                Potential: Credential harvesting
+                            </div>
+                        </div>
+                        <div class="threat-indicator-item clean">
+                            <h4><i class="fas fa-check-circle"></i> Clean File</h4>
+                            <p>document.pdf</p>
+                            <div style="font-size: 0.8rem; color: #68d391;">
+                                Verified: No threats detected
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sign In Prompt -->
+                <div class="sign-in-prompt">
+                    <h3 style="color: var(--ai-color); margin-bottom: 1rem;">Enhanced Threat Intelligence</h3>
+                    <p>Sign in to access advanced threat analysis, historical data, and personalized threat intelligence feeds.</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-ai" onclick="showSignUpModal()">
+                            <i class="fas fa-user-plus"></i> Sign Up
+                        </button>
+                        <button class="btn btn-outline" onclick="showSignInModal()">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Anti-Drone Monitor -->
+            <section id="drone" class="feature-section drone-section">
+                <div class="feature-header">
+                    <h2 class="section-title" style="margin-bottom: 0; text-align: left;">Anti-Drone Defense System</h2>
+                    <button class="btn btn-drone"><i class="fas fa-sync-alt"></i> Refresh Detection</button>
+                </div>
+                
+                <div class="threat-level">
+                    <div class="threat-indicator threat-low"></div>
+                    <span>No active drone threats detected in monitored airspace</span>
+                </div>
+                
+                <div class="monitor-map" id="droneMap">
+                    <div style="text-align: center;">
+                        <i class="fas fa-satellite-dish" style="font-size: 3rem; margin-bottom: 1rem; display: block; color: var(--drone-color);"></i>
+                        <h3>Drone Detection Monitoring Active</h3>
+                        <p>15km operational radius | 96.7% detection accuracy</p>
+                    </div>
+                    <!-- Drone markers will be added dynamically -->
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="activeDronesCount">0</div>
+                        <div class="stat-label">Active Drones</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">28</div>
+                        <div class="stat-label">Sensors Online</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="lastDetection">4h</div>
+                        <div class="stat-label">Last Detection</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">15km</div>
+                        <div class="stat-label">Coverage Radius</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SOC Operations Center -->
+            <section id="soc" class="feature-section soc-section">
+                <h2 class="section-title" style="margin-bottom: 2rem; text-align: left;">Security Operations Center</h2>
+                
+                <div class="soc-grid">
+                    <div class="soc-main">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--soc-color);">Active Security Incidents</h3>
+                        
+                        <div class="soc-item">
+                            <h4>Credential Phishing Campaign</h4>
+                            <p>AI detected coordinated phishing campaign targeting executive accounts with 142 attempts blocked</p>
+                            <div class="confidence-meter">
+                                <div class="confidence-level confidence-high" style="width: 94%"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span>Low</span>
+                                <span>Confidence: 94%</span>
+                                <span>High</span>
+                            </div>
+                        </div>
+                        
+                        <div class="soc-item">
+                            <h4>Network Intrusion Attempt</h4>
+                            <p>Multiple unauthorized access attempts from suspicious IP ranges, automatically blocked by AI systems</p>
+                            <div class="confidence-meter">
+                                <div class="confidence-level confidence-medium" style="width: 78%"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span>Low</span>
+                                <span>Confidence: 78%</span>
+                                <span>High</span>
+                            </div>
+                        </div>
+                        
+                        <div class="soc-item">
+                            <h4>Data Exfiltration Alert</h4>
+                            <p>Unusual data transfer patterns detected, AI systems initiated automatic containment procedures</p>
+                            <div class="confidence-meter">
+                                <div class="confidence-level confidence-high" style="width: 96%"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem;">
+                                <span>Low</span>
+                                <span>Confidence: 96%</span>
+                                <span>High</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="soc-sidebar">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--soc-color);">SOC Analytics</h3>
+                        
+                        <div class="soc-item">
+                            <h4>Incident Response Time</h4>
+                            <div class="stat-value">1.2s</div>
+                            <div class="stat-label">Average automated response</div>
+                        </div>
+                        
+                        <div class="soc-item">
+                            <h4>Active Analysts</h4>
+                            <div class="stat-value">18/24</div>
+                            <div class="stat-label">Currently on duty</div>
+                        </div>
+                        
+                        <div class="soc-item">
+                            <h4>Threats Neutralized</h4>
+                            <div class="stat-value">284</div>
+                            <div class="stat-label">This week</div>
+                        </div>
+                        
+                        <button class="btn btn-soc" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-play-circle"></i> Execute Response Plan
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTI Dashboard -->
+            <section id="cti" class="feature-section cti-section">
+                <h2 class="section-title" style="margin-bottom: 2rem; text-align: left;">Cyber Threat Intelligence</h2>
+                
+                <div class="cti-stats">
+                    <div class="cti-stat">
+                        <div class="stat-value">542</div>
+                        <div class="stat-label">Threat Feeds</div>
+                    </div>
+                    <div class="cti-stat">
+                        <div class="stat-value">1,284</div>
+                        <div class="stat-label">New IOCs Today</div>
+                    </div>
+                    <div class="cti-stat">
+                        <div class="stat-value">42</div>
+                        <div class="stat-label">Active Campaigns</div>
+                    </div>
+                    <div class="cti-stat">
+                        <div class="stat-value">96.3%</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                </div>
+                
+                <div class="cti-grid">
+                    <div class="cti-main">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--cti-color);">Recent Threat Intelligence</h3>
+                        
+                        <div class="cti-item">
+                            <h4>APT29 Campaign Update</h4>
+                            <p>New TTPs identified in ongoing APT29 campaign targeting government infrastructure across Europe</p>
+                            <div class="confidence-meter">
+                                <div class="confidence-level confidence-high" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="cti-item">
+                            <h4>Ransomware-as-a-Service Expansion</h4>
+                            <p>New RaaS platforms emerging with improved encryption and faster deployment capabilities</p>
+                            <div class="confidence-meter">
+                                <div class="confidence-level confidence-medium" style="width: 76%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="cti-item">
+                            <h4>Zero-Day Vulnerability Alert</h4>
+                            <p>Critical vulnerability identified in enterprise VPN solutions, patches available</p>
+                            <div class="confidence-meter">
+                                <div class="confidence-level confidence-high" style="width: 98%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cti-sidebar">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--cti-color);">Intel Sources</h3>
+                        
+                        <div class="cti-item">
+                            <h4>Open Source INT</h4>
+                            <div class="stat-value">284</div>
+                            <div class="stat-label">Sources</div>
+                        </div>
+                        
+                        <div class="cti-item">
+                            <h4>Commercial Feeds</h4>
+                            <div class="stat-value">158</div>
+                            <div class="stat-label">Vendors</div>
+                        </div>
+                        
+                        <div class="cti-item">
+                            <h4>Government Intel</h4>
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">Agencies</div>
+                        </div>
+                        
+                        <button class="btn btn-cti" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-download"></i> Download Latest Report
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+                       
+                
+         
+
+                    <!-- Activity Monitoring Card -->
+                    <div class="dashboard-card" style="border-top: 4px solid var(--soc-color);">
+                        <div class="card-header">
+                            <h3>Real-time Activity</h3>
+                            <div class="card-icon soc-icon"><i class="fas fa-desktop"></i></div>
+                        </div>
+                        <div id="realtimeActivity" style="height: 200px; overflow-y: auto;">
+                            <!-- Activity feed will be populated here -->
+                        </div>
+                        <div class="stats" style="margin-top: 1rem;">
+                            <div class="stat-item">
+                                <div class="stat-value" id="applicationsTracked">255</div>
+                                <div class="stat-label">Apps Tracked</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="websitesMonitored">1.8K</div>
+                                <div class="stat-label">Websites Monitored</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Behavior Analysis Card -->
+                    <div class="dashboard-card" style="border-top: 4px solid var(--cti-color);">
+                        <div class="card-header">
+                            <h3>AI Behavior Analysis</h3>
+                            <div class="card-icon cti-icon"><i class="fas fa-brain"></i></div>
+                        </div>
+                        <div class="threat-level">
+                            <div class="threat-indicator threat-low"></div>
+                            <span>Normal Activity Patterns</span>
+                        </div>
+                        <p>AI monitoring employee behavior patterns for anomalies and policy violations with 96.3% accuracy.</p>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <div class="stat-value" id="anomaliesDetected">5</div>
+                                <div class="stat-label">Anomalies Today</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">96.3%</div>
+                                <div class="stat-label">Accuracy</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               
+
+                <!-- Policy Management -->
+                <div style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem; color: var(--employee-color);">Security Policies</h3>
+                    <div class="tools-grid">
+                        <div class="tool-card ai-tool">
+                            <div class="tool-icon">
+                                <i class="fas fa-desktop"></i>
+                            <h4>Application Control</h4>
+                            <p>Monitor and control application usage, block unauthorized software, and detect suspicious processes</p>
+                            <div class="tool-status status-active">Active</div>
+                        </div>
+                        
+                        <div class="tool-card drone-tool">
+                            <div class="tool-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h4>Web Filtering</h4>
+                            <p>AI-powered web content filtering, URL categorization, and real-time website blocking</p>
+                            <div class="tool-status status-active">Active</div>
+                        </div>
+                        
+                        <div class="tool-card soc-tool">
+                            <div class="tool-icon">
+                                <i class="fas fa-keyboard"></i>
+                            </div>
+                            <h4>Keystroke Analysis</h4>
+                            <p>Behavioral analysis of typing patterns and keyword monitoring for policy violations</p>
+                            <div class="tool-status status-inactive">Inactive</div>
+                        </div>
+                        
+                        <div class="tool-card cti-tool">
+                            <div class="tool-icon">
+                                <i class="fas fa-file-export"></i>
+                            </div>
+                            <h4>Data Loss Prevention</h4>
+                            <p>Monitor file transfers, USB usage, and prevent unauthorized data exfiltration</p>
+                            <div class="tool-status status-active">Active</div>
+                        </div>
+                        
+                        <div class="tool-card link-tool">
+                            <div class="tool-icon">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <h4>Network Monitoring</h4>
+                            <p>Real-time network traffic analysis and connection monitoring for all endpoints</p>
+                            <div class="tool-status status-active">Active</div>
+                        </div>
+                        
+                        <div class="tool-card space-tool">
+                            <div class="tool-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4>Productivity Analytics</h4>
+                            <p>AI-driven productivity analysis and work pattern optimization suggestions</p>
+                            <div class="tool-status status-active">Active</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+   
+                
+                <!-- Policy Configuration -->
+                <div>
+                    <h3 style="color: var(--employee-color); margin-bottom: 1rem;">Policy Settings</h3>
+                    <div style="background: rgba(15, 23, 42, 0.5); border-radius: 8px; padding: 1rem; height: 400px; overflow-y: auto;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4 style="color: #e2e8f0; margin-bottom: 0.5rem;">Web Filtering</h4>
+                            <select id="webFilteringLevel" style="width: 100%; padding: 0.5rem; border-radius: 4px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">
+                                <option value="ethiopian-strict">Ethiopian Strict (Ethio Telecom Guidelines)</option>
+                                <option value="ethiopian-moderate" selected>Ethiopian Moderate (NISS Compliance)</option>
+                                <option value="ethiopian-basic">Ethiopian Basic (Essential Services Only)</option>
+                            </select>
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4 style="color: #e2e8f0; margin-bottom: 0.5rem;">Application Control</h4>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" checked> Block Social Media (Ethiopian Guidelines)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" checked> Block VPN Services
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" checked> Block International VoIP
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox"> Block Local Media Sites
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <h4 style="color: #e2e8f0; margin-bottom: 0.5rem;">Data Protection</h4>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" checked> Monitor USB Devices (NISS Requirement)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" checked> Block International Cloud Storage
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" checked> Encrypt Local Files (Ethiopian Standard)
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox"> Monitor External Communications
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-employee" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-save"></i> Save Policy Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h2>ETH-DF CyberShield AI</h2>
+                </div>
+                <p>Complete Cybersecurity Defense Platform </p>
+                <div class="footer-links">
+                    <a href="#">Dashboard</a>
+                    <a href="#tools">Security Tools</a>
+                    <a href="#drone">Anti-Drone</a>
+                    <a href="#soc">SOC Operations</a>
+                    <a href="#cti">Threat Intelligence</a>
+                    <a href="#detection">Threat Detection</a>
+                    
+                </div>
+                <div class="copyright">
+                    &copy; 2025 ETH-DF CyberShield AI Platform. Developed by welde.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+
+
+
+
+// Network Traffic Analysis - File Selection
+const networkDropArea = document.getElementById('networkDropArea');
+const networkFileInput = document.getElementById('networkFileInput');
+const networkFileInfo = document.getElementById('networkFileInfo');
+const networkFileName = document.getElementById('networkFileName');
+const networkFileDetails = document.getElementById('networkFileDetails');
+
+let selectedNetworkFile = null;
+
+if (networkDropArea && networkFileInput) {
+
+    networkDropArea.addEventListener('click', () => {
+        networkFileInput.click();
+    });
+
+    networkFileInput.addEventListener('change', () => {
+        if (networkFileInput.files.length > 0) {
+            handleNetworkFileSelection(networkFileInput.files[0]);
+        }
+    });
+
+    networkDropArea.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        networkDropArea.classList.add('drag-over');
+    });
+
+    networkDropArea.addEventListener('dragleave', () => {
+        networkDropArea.classList.remove('drag-over');
+    });
+
+    networkDropArea.addEventListener('drop', (event) => {
+        event.preventDefault();
+        networkDropArea.classList.remove('drag-over');
+
+        const file = event.dataTransfer.files[0];
+
+        if (file) {
+            handleNetworkFileSelection(file);
+        }
+    });
+}
+
+     function handleNetworkFileSelection(file) {
+    const allowedExtensions = ['pcap', 'pcapng', 'cap'];
+    const extension = file.name.split('.').pop().toLowerCase();
+
+    if (!allowedExtensions.includes(extension)) {
+        alert(
+            'Unsupported file format. Please select a PCAP, PCAPNG, or CAP file.'
+        );
+        return;
+    }
+
+    const maxSize = 25 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+        alert('The maximum file size is 25 MB.');
+        return;
+    }
+
+    selectedNetworkFile = file;
+
+    networkFileName.textContent = file.name;
+
+    networkFileDetails.textContent =
+        `Size: ${(file.size / (1024 * 1024)).toFixed(2)} MB | Type: Network Capture`;
+
+    networkFileInfo.style.display = 'block';
+}
+// Network Traffic Analysis - Send capture to Flask API
+const analyzeNetworkButton = document.getElementById(
+    'analyzeNetworkButton'
+);
+
+const networkResults = document.getElementById('networkResults');
+
+if (analyzeNetworkButton && networkResults) {
+
+    analyzeNetworkButton.addEventListener('click', async () => {
+
+        if (!selectedNetworkFile) {
+            alert('Please select a network capture first.');
+            return;
+        }
+
+        const originalButtonText = analyzeNetworkButton.innerHTML;
+
+        analyzeNetworkButton.disabled = true;
+        analyzeNetworkButton.textContent = 'Analyzing...';
+
+        networkResults.textContent = 'Analyzing network traffic...';
+
+        try {
+            const formData = new FormData();
+
+            formData.append('capture', selectedNetworkFile);
+
+            const response = await fetch('/api/network/analyze', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.error || 'Network analysis failed.'
+                );
+            }
+
+            // Build the results safely using textContent.
+            networkResults.replaceChildren();
+
+            const heading = document.createElement('h3');
+            heading.textContent = 'Network Analysis Results';
+            networkResults.appendChild(heading);
+
+            const summary = document.createElement('p');
+            summary.textContent =
+                `File: ${data.filename} | ` +
+                `Packets analyzed: ${data.packets_analyzed} | ` +
+                `Limit: ${data.packet_limit}`;
+            networkResults.appendChild(summary);
+
+            const details = document.createElement('pre');
+
+            details.textContent = JSON.stringify({
+                status: data.status,
+                protocol_counts: data.protocol_counts,
+                source_ips: data.source_ips,
+                destination_ips: data.destination_ips,
+                dns_queries: data.dns_queries,
+                note: data.note
+            }, null, 2);
+
+            details.style.whiteSpace = 'pre-wrap';
+            details.style.overflowWrap = 'anywhere';
+            details.style.maxHeight = '500px';
+            details.style.overflowY = 'auto';
+
+            networkResults.appendChild(details);
+
+        } catch (error) {
+
+            networkResults.replaceChildren();
+
+            const errorMessage = document.createElement('p');
+            errorMessage.textContent =
+                `Analysis error: ${error.message}`;
+
+            networkResults.appendChild(errorMessage);
+
+        } finally {
+
+            analyzeNetworkButton.disabled = false;
+            analyzeNetworkButton.innerHTML = originalButtonText;
+
+        }
+    });
+}
+
+
+
+
+        // System State
+        const systemState = {
+            endpoints: 8742,
+            accuracy: 99.1,
+            threatsBlocked: 284,
+            activeDrones: 0,
+            lastDroneDetection: '4h ago',
+            threatIndicators: 1284,
+            activeCampaigns: 42,
+            urlsScanned: 12487,
+            maliciousLinks: 142
+        };
+
+       
+            // Get color based on risk level
+        function getRiskColor(riskLevel) {
+                switch(riskLevel) {
+                    case 'high': return '#e53e3e';
+                    case 'medium': return '#d69e2e';
+                    case 'low': return '#38a169';
+                    default: return '#4a5568';
+                }
+            }
+
+        
+
+            
+
+        
+
+        // Enhanced Threat Detection JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tab functionality
+            initializeTabs();
+            
+            // Initialize file upload area
+            initializeFileUpload();
+            
+            // Load initial threat data
+            loadThreatIndicators();
+        });
+
+        // Tab functionality
+        function initializeTabs() {
+            const tabs = document.querySelectorAll('.detection-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show selected tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // File upload functionality
+        function initializeFileUpload() {
+            const dropArea = document.getElementById('fileDropArea');
+            const fileInput = document.getElementById('fileInput');
+            
+            // Click to select file
+            dropArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.classList.add('dragover');
+            }
+            
+            function unhighlight() {
+                dropArea.classList.remove('dragover');
+            }
+            
+            dropArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFileSelect(files);
+            }
+        }
+
+        // Handle file selection
+        function handleFileSelect(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                const fileInfo = document.getElementById('fileInfo');
+                const fileName = document.getElementById('fileName');
+                const fileDetails = document.getElementById('fileDetails');
+                
+                // Update file info
+                fileName.textContent = file.name;
+                fileDetails.textContent = `Size: ${formatFileSize(file.size)} | Type: ${file.type || 'Unknown'}`;
+                
+                // Show file info
+                fileInfo.style.display = 'block';
+                
+                // Store file for analysis
+                window.currentFile = file;
+            }
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Analyze threat based on type
+        function analyzeThreat(type) {
+            let inputValue, resultsContainer;
+            
+            switch(type) {
+                case 'url':
+                    inputValue = document.getElementById('urlInput').value.trim();
+                    resultsContainer = document.getElementById('urlResults');
+                    break;
+                case 'ip':
+                    inputValue = document.getElementById('ipInput').value.trim();
+                    resultsContainer = document.getElementById('ipResults');
+                    break;
+                case 'file':
+                    if (!window.currentFile) {
+                        alert('Please select a file first');
+                        return;
+                    }
+                    inputValue = window.currentFile.name;
+                    resultsContainer = document.getElementById('fileResults');
+                    break;
+                case 'search':
+                    inputValue = document.getElementById('searchInput').value.trim();
+                    resultsContainer = document.getElementById('searchResults');
+                    break;
+            }
+            
+            if (!inputValue) {
+                alert(`Please enter a ${type} to analyze`);
+                return;
+            }
+                        // Get real URL reputation data from VirusTotal.
+            if (type === 'url') {
+                resultsContainer.textContent =
+                    'Querying VirusTotal for URL report...';
+
+                fetch('/api/virustotal/url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        indicator: inputValue
+                    })
+                })
+                .then(async response => {
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(
+                            data.error || 'VirusTotal URL lookup failed'
+                        );
+                    }
+
+                    return data;
+                })
+                .then(data => {
+                    const stats = data.analysis_stats || {};
+
+                    resultsContainer.innerHTML = `
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+
+                            <div>
+                                <h4>VirusTotal URL Analysis</h4>
+
+                                <p><strong>URL:</strong>
+                                    <span id="vtUrlIndicator"></span>
+                                </p>
+
+                                <p><strong>Assessment:</strong>
+                                    <span id="vtUrlAssessment"></span>
+                                </p>
+
+                                <p><strong>Malicious detections:</strong>
+                                    <span id="vtUrlMalicious"></span>
+                                </p>
+
+                                <p><strong>Suspicious detections:</strong>
+                                    <span id="vtUrlSuspicious"></span>
+                                </p>
+
+                                <p><strong>Harmless detections:</strong>
+                                    <span id="vtUrlHarmless"></span>
+                                </p>
+
+                                <p><strong>Undetected:</strong>
+                                    <span id="vtUrlUndetected"></span>
+                                </p>
+
+                                <p><strong>Reputation score:</strong>
+                                    <span id="vtUrlReputation"></span>
+                                </p>
+
+                                <p><strong>Last analysis:</strong>
+                                    <span id="vtUrlDate"></span>
+                                </p>
+
+                                <p id="vtUrlMessage"></p>
+
+                                <p>
+                                    <a id="vtUrlReportLink"
+                                       target="_blank"
+                                       rel="noopener noreferrer">
+                                        Open full VirusTotal URL report
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    `;
+
+                    const setText = (id, value) => {
+                        const element =
+                            resultsContainer.querySelector('#' + id);
+
+                        element.textContent =
+                            value === null ||
+                            value === undefined ||
+                            value === ''
+                                ? 'Not available'
+                                : String(value);
+                    };
+
+                    setText('vtUrlIndicator', data.indicator);
+                    setText('vtUrlAssessment', data.assessment);
+                    setText('vtUrlMalicious', stats.malicious ?? 0);
+                    setText('vtUrlSuspicious', stats.suspicious ?? 0);
+                    setText('vtUrlHarmless', stats.harmless ?? 0);
+                    setText('vtUrlUndetected', stats.undetected ?? 0);
+                    setText('vtUrlReputation', data.reputation);
+
+                    const timestamp = data.last_analysis_date;
+
+                    setText(
+                        'vtUrlDate',
+                        timestamp
+                            ? new Date(timestamp * 1000).toLocaleString()
+                            : null
+                    );
+
+                    setText(
+                        'vtUrlMessage',
+                        data.message ||
+                        'Review vendor detections before drawing conclusions.'
+                    );
+
+                    const reportLink =
+                        resultsContainer.querySelector('#vtUrlReportLink');
+
+                    if (
+                        typeof data.report_url === 'string' &&
+                        data.report_url.startsWith(
+                            'https://www.virustotal.com/'
+                        )
+                    ) {
+                        reportLink.href = data.report_url;
+                    } else {
+                        reportLink.removeAttribute('href');
+                    }
+                })
+                .catch(error => {
+                    resultsContainer.textContent =
+                        'VirusTotal URL lookup failed: ' + error.message;
+                });
+
+                return;
+            }
+            // Get real IP reputation data from VirusTotal.
+            if (type === 'ip') {
+                resultsContainer.textContent =
+                    'Querying VirusTotal...';
+
+                fetch('/api/virustotal/ip', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        indicator: inputValue
+                    })
+                })
+                .then(async response => {
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(
+                            data.error || 'VirusTotal analysis failed'
+                        );
+                    }
+
+                    return data;
+                })
+                .then(data => {
+                    const stats = data.analysis_stats || {};
+
+                    resultsContainer.innerHTML = `
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <h4>VirusTotal IP Analysis</h4>
+
+                                <p><strong>IP Address:</strong>
+                                    <span id="vtIndicator"></span>
+                                </p>
+
+                                <p><strong>Assessment:</strong>
+                                    <span id="vtAssessment"></span>
+                                </p>
+
+                                <p><strong>Malicious:</strong>
+                                    <span id="vtMalicious"></span>
+                                </p>
+
+                                <p><strong>Suspicious:</strong>
+                                    <span id="vtSuspicious"></span>
+                                </p>
+
+                                <p><strong>Harmless:</strong>
+                                    <span id="vtHarmless"></span>
+                                </p>
+
+                                <p><strong>Undetected:</strong>
+                                    <span id="vtUndetected"></span>
+                                </p>
+
+                                <p><strong>Reputation:</strong>
+                                    <span id="vtReputation"></span>
+                                </p>
+
+                                <p><strong>Country:</strong>
+                                    <span id="vtCountry"></span>
+                                </p>
+
+                                <p><strong>Network Owner:</strong>
+                                    <span id="vtOwner"></span>
+                                </p>
+
+                                <p><strong>Last Analysis:</strong>
+                                    <span id="vtDate"></span>
+                                </p>
+
+                                <p id="vtMessage"></p>
+
+                                <p>
+                                    <a id="vtReportLink"
+                                       target="_blank"
+                                       rel="noopener noreferrer">
+                                        Open full VirusTotal report
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    `;
+
+                    const setText = (id, value) => {
+                        resultsContainer.querySelector('#' + id)
+                            .textContent =
+                            value === null || value === undefined ||
+                            value === ''
+                                ? 'Not available'
+                                : String(value);
+                    };
+
+                    setText('vtIndicator', data.indicator);
+                    setText('vtAssessment', data.assessment);
+                    setText('vtMalicious', stats.malicious ?? 0);
+                    setText('vtSuspicious', stats.suspicious ?? 0);
+                    setText('vtHarmless', stats.harmless ?? 0);
+                    setText('vtUndetected', stats.undetected ?? 0);
+                    setText('vtReputation', data.reputation);
+                    setText('vtCountry', data.country);
+                    setText('vtOwner', data.network_owner);
+                    setText(
+                        'vtMessage',
+                        data.message ||
+                        'Review vendor detections before drawing conclusions.'
+                    );
+
+                    const timestamp = data.last_analysis_date;
+                    setText(
+                        'vtDate',
+                        timestamp
+                            ? new Date(timestamp * 1000).toLocaleString()
+                            : null
+                    );
+
+                    const reportLink =
+                        resultsContainer.querySelector('#vtReportLink');
+
+                    if (
+                        typeof data.report_url === 'string' &&
+                        data.report_url.startsWith(
+                            'https://www.virustotal.com/'
+                        )
+                    ) {
+                        reportLink.href = data.report_url;
+                    } else {
+                        reportLink.removeAttribute('href');
+                    }
+                })
+                .catch(error => {
+                    resultsContainer.textContent =
+                        'VirusTotal analysis failed: ' + error.message;
+                });
+
+                return;
+            }
+
+
+               // Perform real static analysis for uploaded files.
+if (type === 'file') {
+    const formData = new FormData();
+    formData.append('file', window.currentFile);
+
+    resultsContainer.innerHTML = `
+        <div style="margin-top: 1rem; padding: 1.5rem;
+                    background: rgba(15, 23, 42, 0.5);
+                    border-radius: 8px;">
+            <h3>Static File Analysis</h3>
+            <p id="staticAnalysisStatus">Analyzing uploaded file...</p>
+            <pre id="staticAnalysisOutput"
+                 style="white-space: pre-wrap; overflow-wrap: anywhere;
+                        font-size: 13px;"></pre>
+        </div>
+    `;
+
+    const statusElement =
+        document.getElementById('staticAnalysisStatus');
+
+    const outputElement =
+        document.getElementById('staticAnalysisOutput');
+
+    fetch('/api/file/static-analysis', {
+        method: 'POST',
+        body: formData
+    })
+    .then(async response => {
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || 'Static analysis failed'
+            );
+        }
+
+        statusElement.textContent =
+            'Analysis completed. Review the findings below.';
+
+        outputElement.textContent =
+            JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+        statusElement.textContent = 'Analysis failed';
+
+        outputElement.textContent = error.message;
+    });
+
+    return;
+}
+
+
+            // Show analysis in progress
+            showAnalysisProgress(type, inputValue, resultsContainer);
+            
+            // Simulate AI analysis
+            setTimeout(() => {
+                generateAnalysisResults(type, inputValue, resultsContainer);
+            }, 3000);
+        }
+
+        // Show analysis progress
+        function showAnalysisProgress(type, inputValue, container) {
+            const analysisSteps = {
+                url: ['Initializing', 'Domain Resolution', 'Content Analysis', 'Threat Assessment', 'Community Check'],
+                ip: ['Initializing', 'Geo-location', 'Reputation Check', 'Threat Correlation', 'Community Check'],
+                file: ['Initializing', 'File Type Verification', 'Static Analysis', 'Behavioral Analysis', 'Threat Assessment'],
+                search: ['Initializing', 'Query Processing', 'Database Search', 'Threat Correlation', 'Results Compilation']
+            };
+            
+            container.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="upload-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>ETH-DF AI Analysis in Progress</h3>
+                    <p>Analyzing ${type.toUpperCase()}: <strong>${inputValue}</strong></p>
+                    
+                    <div class="analysis-steps">
+                        ${analysisSteps[type].map((step, index) => `
+                            <div class="analysis-step ${index === 0 ? 'active' : ''}" id="step-${index}">
+                                <i class="fas fa-${index === 0 ? 'play' : 'circle'}"></i><br>
+                                ${step}
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="analysis-progress">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+            `;
+            
+            // Animate progress
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const interval = setInterval(() => {
+                progress += 20;
+                progressBar.style.width = `${progress}%`;
+                
+                // Update active step
+                document.querySelectorAll('.analysis-step').forEach((step, index) => {
+                    step.classList.toggle('active', index <= progress / 20);
+                });
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                }
+            }, 600);
+        }
+
+        // Generate analysis results
+        function generateAnalysisResults(type, inputValue, container) {
+            // Simulate different results based on type and random factors
+            const isMalicious = Math.random() > 0.7;
+            const isSuspicious = Math.random() > 0.5 && !isMalicious;
+            
+            let resultClass, resultIcon, resultTitle, resultDetails;
+            
+            if (isMalicious) {
+                resultClass = 'result-malicious';
+                resultIcon = '<i class="fas fa-skull-crossbones"></i>';
+                resultTitle = 'MALICIOUS THREAT DETECTED';
+                resultDetails = 'This item has been identified as malicious and poses a security risk.';
+            } else if (isSuspicious) {
+                resultClass = 'result-suspicious';
+                resultIcon = '<i class="fas fa-exclamation-triangle"></i>';
+                resultTitle = 'SUSPICIOUS ACTIVITY DETECTED';
+                resultDetails = 'This item exhibits characteristics commonly associated with security threats.';
+            } else {
+                resultClass = 'result-safe';
+                resultIcon = '<i class="fas fa-check-circle"></i>';
+                resultTitle = 'NO THREATS DETECTED';
+                resultDetails = 'This item appears to be clean and does not pose any immediate security risk.';
+            }
+            
+            // Generate type-specific details
+            const typeDetails = generateTypeSpecificDetails(type, inputValue, isMalicious, isSuspicious);
+            
+            // Check if auto-sharing is enabled
+            const autoShare = document.getElementById('autoShare').checked;
+            const shareAnonymously = document.getElementById('shareAnonymously').checked;
+            
+            container.innerHTML = `
+                <div class="result-item ${resultClass}">
+                    <div class="result-icon">${resultIcon}</div>
+                    <div>
+                        <h4>${resultTitle}</h4>
+                        <p>${resultDetails}</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(15, 23, 42, 0.5); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <h4>ETH-DF AI Analysis Details:</h4>
+                    ${typeDetails}
+                    
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                        <h5>Community Sharing:</h5>
+                        <p>
+                            ${autoShare ? 
+                                `<i class="fas fa-check-circle" style="color: #68d391;"></i> Threat data ${shareAnonymously ? 'anonymously ' : ''}shared with security community` :
+                                `<i class="fas fa-times-circle" style="color: #fc8181;"></i> Auto-sharing disabled`
+                            }
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            // Update threat indicators with new data
+            if (isMalicious || isSuspicious) {
+                updateThreatIndicators(type, inputValue, isMalicious ? 'malicious' : 'suspicious');
+            }
+        }
+
+        // Generate type-specific analysis details
+        function generateTypeSpecificDetails(type, inputValue, isMalicious, isSuspicious) {
+            const confidence = (Math.random() * 30 + 70).toFixed(1);
+            
+            switch(type) {
+                case 'url':
+                    return `
+                        <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+                            <li>Domain reputation: ${isMalicious ? 'Poor' : isSuspicious ? 'Questionable' : 'Good'}</li>
+                            <li>SSL Certificate: ${Math.random() > 0.2 ? 'Valid' : 'Invalid'}</li>
+                            <li>Phishing database match: ${isMalicious ? 'Yes' : 'No'}</li>
+                            <li>Behavioral analysis: ${isMalicious ? 'Malicious patterns detected' : isSuspicious ? 'Some suspicious elements' : 'Normal'}</li>
+                            <li>Community reports: ${Math.floor(Math.random() * 50)}</li>
+                            <li>ETH-DF AI confidence: ${confidence}%</li>
+                        </ul>
+                    `;
+                    
+                case 'ip':
+                    return `
+                        <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+                            <li>Geo-location: ${getRandomCountry()}</li>
+                            <li>ASN: AS${Math.floor(Math.random() * 100000)}</li>
+                            <li>Reputation score: ${isMalicious ? 'Poor' : isSuspicious ? 'Neutral' : 'Good'}</li>
+                            <li>Associated threats: ${isMalicious ? Math.floor(Math.random() * 10) + 1 : 'None'}</li>
+                            <li>Recent activity: ${isMalicious ? 'Suspicious connections detected' : 'Normal'}</li>
+                            <li>ETH-DF AI confidence: ${confidence}%</li>
+                        </ul>
+                    `;
+                    
+                case 'file':
+                    return `
+                        <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+                            <li>File type: ${window.currentFile.type || 'Unknown'}</li>
+                            <li>File size: ${formatFileSize(window.currentFile.size)}</li>
+                            <li>Static analysis: ${isMalicious ? 'Malicious code patterns detected' : isSuspicious ? 'Some suspicious elements' : 'Clean'}</li>
+                            <li>Behavioral analysis: ${isMalicious ? 'High risk behaviors identified' : isSuspicious ? 'Potentially unwanted behaviors' : 'Normal'}</li>
+                            <li>Digital signature: ${Math.random() > 0.7 ? 'Valid' : 'None'}</li>
+                            <li>ETH-DF AI confidence: ${confidence}%</li>
+                        </ul>
+                    `;
+                    
+                case 'search':
+                    const resultCount = Math.floor(Math.random() * 15) + 1;
+                    return `
+                        <p>Found ${resultCount} results for "${inputValue}":</p>
+                        <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+                            ${Array.from({length: Math.min(5, resultCount)}, (_, i) => `
+                                <li>
+                                    ${getRandomThreatType()} - ${getRandomSeverity()} severity
+                                    <span style="color: #a0aec0; font-size: 0.9rem;">
+                                        (First seen: ${getRandomDate()})
+                                    </span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                        <p>ETH-DF AI confidence: ${confidence}%</p>
+                    `;
+            }
+        }
+
+        // Helper functions for generating random data
+        function getRandomCountry() {
+            const countries = ['United States', 'Russia', 'China', 'Germany', 'Brazil', 'India', 'United Kingdom', 'France'];
+            return countries[Math.floor(Math.random() * countries.length)];
+        }
+        
+        function getRandomThreatType() {
+            const threats = ['Phishing URL', 'Malware Distribution', 'Command & Control', 'Data Exfiltration', 'Brute Force Attack'];
+            return threats[Math.floor(Math.random() * threats.length)];
+        }
+        
+        function getRandomSeverity() {
+            const severities = ['Low', 'Medium', 'High', 'Critical'];
+            return severities[Math.floor(Math.random() * severities.length)];
+        }
+        
+        function getRandomDate() {
+            const daysAgo = Math.floor(Math.random() * 30) + 1;
+            const date = new Date();
+            date.setDate(date.getDate() - daysAgo);
+            return date.toLocaleDateString();
+        }
+
+        // Update threat indicators
+        function updateThreatIndicators(type, value, status) {
+            const indicatorsContainer = document.querySelector('.threat-indicators');
+            const newIndicator = document.createElement('div');
+            newIndicator.className = `threat-indicator-item ${status}`;
+            
+            let icon, description;
+            if (status === 'malicious') {
+                icon = '<i class="fas fa-skull-crossbones"></i>';
+                description = 'Associated with malicious activity';
+            } else {
+                icon = '<i class="fas fa-exclamation-triangle"></i>';
+                description = 'Potential security concern';
+            }
+            
+            newIndicator.innerHTML = `
+                <h4>${icon} ${type.toUpperCase()} ${status.charAt(0).toUpperCase() + status.slice(1)}</h4>
+                <p>${value}</p>
+                <div style="font-size: 0.8rem; color: ${status === 'malicious' ? '#fc8181' : '#f6e05e'};">
+                    ${description}
+                </div>
+            `;
+            
+            // Add to beginning of container
+            indicatorsContainer.insertBefore(newIndicator, indicatorsContainer.firstChild);
+            
+            // Remove oldest indicator if more than 3
+            if (indicatorsContainer.children.length > 3) {
+                indicatorsContainer.removeChild(indicatorsContainer.lastChild);
+            }
+        }
+
+        // Load initial threat indicators
+        function loadThreatIndicators() {
+            // This would typically load from an API
+            console.log('Loading threat indicators...');
+        }
+
+        // Initialize the system
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboard();
+            simulateDroneActivity();
+            simulateAIUpdates();
+        });
+
+        // Update dashboard with current state
+        function updateDashboard() {
+            document.getElementById('activeDronesCount').textContent = systemState.activeDrones;
+            document.getElementById('lastDetection').textContent = systemState.lastDroneDetection;
+        }
+
+        // Simulate drone detection activity
+        function simulateDroneActivity() {
+            const droneMap = document.getElementById('droneMap');
+            
+            // Clear existing markers
+            const existingMarkers = droneMap.querySelectorAll('.drone-marker');
+            existingMarkers.forEach(marker => marker.remove());
+            
+            // Add random drone markers based on threat level
+            if (systemState.activeDrones > 0) {
+                for (let i = 0; i < systemState.activeDrones; i++) {
+                    const marker = document.createElement('div');
+                    marker.className = 'drone-marker';
+                    marker.style.left = `${15 + Math.random() * 70}%`;
+                    marker.style.top = `${15 + Math.random() * 70}%`;
+                    droneMap.appendChild(marker);
+                }
+            }
+        }
+
+        // Simulate AI system updates
+        function simulateAIUpdates() {
+            setInterval(() => {
+                // Randomly update stats to simulate live data
+                systemState.endpoints += Math.floor(Math.random() * 15) - 5;
+                systemState.threatsBlocked += Math.floor(Math.random() * 3);
+                systemState.threatIndicators += Math.floor(Math.random() * 10);
+                systemState.urlsScanned += Math.floor(Math.random() * 50);
+                systemState.maliciousLinks += Math.floor(Math.random() * 2);
+                
+                // Randomly change drone activity
+                if (Math.random() > 0.8) {
+                    systemState.activeDrones = Math.floor(Math.random() * 6);
+                    systemState.lastDroneDetection = 'Just now';
+                    updateDashboard();
+                    simulateDroneActivity();
+                }
+                
+                // Update DOM elements
+                document.querySelectorAll('.stat-value')[0].textContent = systemState.endpoints.toLocaleString();
+                document.querySelectorAll('.stat-value')[2].textContent = systemState.threatsBlocked;
+                document.querySelectorAll('.stat-value')[7].textContent = systemState.threatIndicators.toLocaleString();
+                document.querySelectorAll('.stat-value')[8].textContent = systemState.activeCampaigns;
+                document.querySelectorAll('.stat-value')[12].textContent = systemState.urlsScanned.toLocaleString();
+                document.querySelectorAll('.stat-value')[14].textContent = systemState.maliciousLinks;
+                
+            }, 7000); // Update every 7 seconds
+        }
+
+        // ===== ENHANCED AUTHENTICATION FUNCTIONS =====
+        
+        // Enhanced Sign In Functions
+        function signInWithGoogle() {
+            showLoading('Connecting to Google...');
+            // Simulate Google OAuth process
+            setTimeout(() => {
+                hideLoading();
+                showNotification('Successfully signed in with Google Account', 'success');
+                updateUserProfile('Google User', 'google');
+            }, 2000);
+        }
+
+        function signInWithMicrosoft() {
+            showLoading('Connecting to Microsoft...');
+            // Simulate Microsoft OAuth process
+            setTimeout(() => {
+                hideLoading();
+                showNotification('Successfully signed in with Microsoft Account', 'success');
+                updateUserProfile('Microsoft User', 'microsoft');
+            }, 2000);
+        }
+
+        function showSignUpModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="auth-modal-content">
+                    <div class="auth-header">
+                        <h2>Create Account</h2>
+                        <p>Join ETH-DF CyberShield AI Platform</p>
+                    </div>
+                    
+                    <form id="signUpForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="signupName">Full Name</label>
+                            <input type="text" id="signupName" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signupEmail">Email Address</label>
+                            <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" placeholder="Create a password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signupConfirmPassword">Confirm Password</label>
+                            <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="remember-me">
+                                <input type="checkbox" required>
+                                I agree to the Terms of Service and Privacy Policy
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-ai" style="width: 100%;">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </form>
+                    
+                    <div class="auth-divider">
+                        <span>or continue with</span>
+                    </div>
+                    
+                    <div class="social-auth">
+                        <button class="social-btn google" onclick="signInWithGoogle()">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button class="social-btn microsoft" onclick="signInWithMicrosoft()">
+                            <i class="fab fa-microsoft"></i> Microsoft
+                        </button>
+                    </div>
+                    
+                    <div class="auth-footer">
+                        <p>Already have an account? 
+                            <a href="#" onclick="this.parentElement.parentElement.parentElement.remove(); showSignInModal()">Sign In</a>
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Handle form submission
+            document.getElementById('signUpForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const password = document.getElementById('signupPassword').value;
+                const confirmPassword = document.getElementById('signupConfirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    showNotification('Passwords do not match', 'error');
+                    return;
+                }
+                
+                showLoading('Creating your account...');
+                setTimeout(() => {
+                    hideLoading();
+                    modal.remove();
+                    showNotification('Account created successfully! Please check your email for verification.', 'success');
+                }, 2000);
+            });
+        }
+
+        function showSignInModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="auth-modal-content">
+                    <div class="auth-header">
+                        <h2>Sign In</h2>
+                        <p>Welcome back to ETH-DF CyberShield AI</p>
+                    </div>
+                    
+                    <form id="signInForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="signinEmail">Email Address</label>
+                            <input type="email" id="signinEmail" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signinPassword">Password</label>
+                            <input type="password" id="signinPassword" placeholder="Enter your password" required>
+                        </div>
+                        
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox">
+                                Remember me
+                            </label>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-ai" style="width: 100%;">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    </form>
+                    
+                    <div class="auth-divider">
+                        <span>or continue with</span>
+                    </div>
+                    
+                    <div class="social-auth">
+                        <button class="social-btn google" onclick="signInWithGoogle()">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button class="social-btn microsoft" onclick="signInWithMicrosoft()">
+                            <i class="fab fa-microsoft"></i> Microsoft
+                        </button>
+                    </div>
+                    
+                    <div class="auth-footer">
+                        <p>Don't have an account? 
+                            <a href="#" onclick="this.parentElement.parentElement.parentElement.remove(); showSignUpModal()">Create Account</a>
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Handle form submission
+            document.getElementById('signInForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showLoading('Signing in...');
+                setTimeout(() => {
+                    hideLoading();
+                    modal.remove();
+                    showNotification('Successfully signed in!', 'success');
+                    updateUserProfile('Email User', 'email');
+                }, 2000);
+            });
+        }
+
+        // Utility Functions
+        function showLoading(message = 'Loading...') {
+            const loading = document.createElement('div');
+            loading.className = 'modal';
+            loading.style.display = 'flex';
+            loading.innerHTML = `
+                <div class="auth-modal-content" style="text-align: center;">
+                    <div class="upload-icon">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                    <h3>${message}</h3>
+                    <p>Please wait while we process your request...</p>
+                </div>
+            `;
+            loading.id = 'loadingModal';
+            document.body.appendChild(loading);
+        }
+
+        function hideLoading() {
+            const loading = document.getElementById('loadingModal');
+            if (loading) {
+                loading.remove();
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        function updateUserProfile(name, provider) {
+            // Update header sign in button
+            const signInBtn = document.querySelector('nav ul li:last-child a');
+            signInBtn.innerHTML = `<i class="fas fa-user-check"></i> ${name}`;
+            signInBtn.style.background = 'rgba(56, 161, 105, 0.2)';
+            signInBtn.style.color = '#68d391';
+            signInBtn.onclick = null;
+            
+            // Show user profile in a tooltip or update UI
+            console.log(`User ${name} signed in via ${provider}`);
+        }
+    </script>
+</body>
+</html>
